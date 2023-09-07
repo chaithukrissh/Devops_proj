@@ -1,0 +1,32 @@
+ pipeline{
+     agent any
+
+     stages{
+            stage("build"){
+                steps{
+                    sh "docker build -t hotel:1.2 ."
+                }
+            }
+
+            stage("tag"){
+                steps{
+                    sh "docker tag hotel:1.2 chaithukrissh/hotel:1.2"
+                }
+            }
+
+
+         stage("Deploy"){
+             steps{
+                     withCredentials([usernamePassword(credentialsId:'docker-repo' , usernameVariable:'user' , passwordVariable:'pass')]){
+                         sh " docker login -u $user -p $pass "
+                     }
+                     sh " docker push chaithukrissh/hotel:1.2"
+             }
+         }
+         stage("test"){
+             steps{
+                 sh "docker images"
+            }
+        }
+     }
+}
