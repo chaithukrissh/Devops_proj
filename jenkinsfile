@@ -19,8 +19,9 @@
              steps{
                      withCredentials([usernamePassword(credentialsId:'docker-hub' , usernameVariable:'user' , passwordVariable:'pass')]){
                          sh " docker login -u $user -p $pass "
+                         sh " docker push chaithukrissh/hotel:1.2"
                      }
-                     sh " docker push chaithukrissh/hotel:1.2"
+                     
              }
          }
          stage("test"){
